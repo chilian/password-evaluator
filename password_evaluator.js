@@ -1,13 +1,13 @@
 
 /*
-  password-evaluator v 0.1
+  password-evaluator v 0.2
   http://cc-web.eu/projects/javascript/password-evaluator
-  Copyright 2012, Christoph Chilian
+  Copyright 2012, Christoph Chilian <dev@cc-web.eu>
 
-  Dual licensed under the MIT or GPL Version 2 licenses.
-  http://cc-web.eu/projects/password-evaluator/license
+  Licensed under the MIT.
+  http://cc-web.eu/projects/javascript/password-evaluator/license
 
-  Date: 2012-01-06 17:51:24 +0100
+  Date: 2012-01-14 14:51:24 +0100
 */
 
 (function() {
@@ -26,7 +26,7 @@
     */
 
     PasswordEvaluator.prototype.logger = function(msg, level) {
-      if (level == null) level = 0;
+      if (level == null) level = 2;
       if (this.debug_mode === true && typeof console !== "undefined") {
         switch (parseInt(level)) {
           case 1:
@@ -44,12 +44,16 @@
           case 5:
             console.error(msg);
         }
+      } else if (this.debug_mode === true) {
+        alert(msg);
       }
       return msg;
     };
 
     PasswordEvaluator.prototype.check_password = function(pwd) {
+      if (pwd == null) pwd = "";
       this.score = 0;
+      if (pwd === "") this.logger("Attention: no password is given!!!", 3);
       this.logger("start checking pw", 1);
       this.score += this.calc_score_number_of_characters(pwd);
       this.score += this.calc_score_lowercase_letters(pwd);
@@ -77,7 +81,7 @@
     PasswordEvaluator.prototype.calc_score_number_of_characters = function(pwd) {
       var score;
       score = parseInt(pwd.length * 4);
-      this.logger("Score=> number of characters: " + score, 1);
+      this.logger("Score=> number of characters: " + score);
       return score;
     };
 
@@ -85,7 +89,7 @@
       var count_lc, score;
       count_lc = this.count_regex_matches(pwd, /[a-z]/g);
       score = count_lc < pwd.length && count_lc >= 1 ? parseInt((pwd.length - count_lc) * 2) : 0;
-      this.logger("Score=> lowercase_letters: " + score, 1);
+      this.logger("Score=> lowercase_letters: " + score);
       return score;
     };
 
@@ -93,29 +97,28 @@
       var count_uc, score;
       count_uc = this.count_regex_matches(pwd, /[A-Z]/g);
       score = count_uc < pwd.length && count_uc >= 1 ? parseInt((pwd.length - count_uc) * 2) : 0;
-      this.logger("Score=> uppercase_letters: " + score, 1);
+      this.logger("Score=> uppercase_letters: " + score);
       return score;
     };
 
     PasswordEvaluator.prototype.calc_score_numbers = function(pwd) {
       var score;
       score = parseInt(this.count_regex_matches(pwd, /[0-9]/g) * 4);
-      this.logger("Score=> numbers: " + score, 1);
+      this.logger("Score=> numbers: " + score);
       return score;
     };
 
     PasswordEvaluator.prototype.calc_score_symbols = function(pwd) {
       var score;
       score = parseInt(this.count_regex_matches(pwd, /[^a-zA-Z0-9_]/g) * 6);
-      this.logger("Score=> symbols: " + score, 1);
+      this.logger("Score=> symbols: " + score);
       return score;
     };
 
     PasswordEvaluator.prototype.calc_score_middle_numbers_or_symbols = function(pwd) {
       var score;
       score = parseInt(this.count_regex_matches(pwd.substring(1, pwd.length - 1), /([\W]|[\d])/ig) * 2);
-      this.logger("Score=> middle_numbers_or_symbols: " + score, 1);
-      console.log(pwd.match(/[a-z]+([^a-z])[a-z]*/ig));
+      this.logger("Score=> middle_numbers_or_symbols: " + score);
       return score;
     };
 
@@ -126,14 +129,14 @@
     PasswordEvaluator.prototype.calc_score_letters_only = function(pwd) {
       var score;
       score = this.count_regex_matches(pwd, /[^a-z]/ig) ? 0 : parseInt(this.count_regex_matches(pwd, /[a-z]/ig));
-      this.logger("Score=> letters_only: -" + score, 1);
+      this.logger("Score=> letters_only: -" + score);
       return score;
     };
 
     PasswordEvaluator.prototype.calc_score_numbers_only = function(pwd) {
       var score;
       score = parseInt(this.count_regex_matches(pwd, /[^0-9]/)) > 0 ? 0 : pwd.length;
-      this.logger("Score=> numbers_only: -" + score, 1);
+      this.logger("Score=> numbers_only: -" + score);
       return score;
     };
 
@@ -143,11 +146,11 @@
       nRepInc = 0;
       bCharExists = false;
       arr_pwd = pwd.replace(/\s+/g, "").split(/\s*/);
-      for (_i = 0, _len = pwd.length; _i < _len; _i++) {
-        a = pwd[_i];
+      for (_i = 0, _len = arr_pwd.length; _i < _len; _i++) {
+        a = arr_pwd[_i];
         bCharExists = false;
-        for (_j = 0, _len2 = pwd.length; _j < _len2; _j++) {
-          b = pwd[_j];
+        for (_j = 0, _len2 = arr_pwd.length; _j < _len2; _j++) {
+          b = arr_pwd[_j];
           if ((a === b) && (_i !== _j)) {
             bCharExists = true;
             nRepInc += Math.abs(arr_pwd.length / (_j - _i));
@@ -164,28 +167,28 @@
         }
       }
       score = nRepInc;
-      this.logger("Score=> repeat_characters: -" + score, 1);
+      this.logger("Score=> repeat_characters: -" + score);
       return score;
     };
 
     PasswordEvaluator.prototype.calc_score_consecutive_lowercase_letters = function(pwd) {
       var score;
       score = parseInt(this.count_regex_matches(pwd, /[a-z]/g)) * 2;
-      this.logger("Score=> consecutive_lowercase_letters: -" + score, 1);
+      this.logger("Score=> consecutive_lowercase_letters: -" + score);
       return score;
     };
 
     PasswordEvaluator.prototype.calc_score_consecutive_uppercase_letters = function(pwd) {
       var score;
       score = parseInt(this.count_regex_matches(pwd, /[A-Z]/g)) * 2;
-      this.logger("Score=> consecutive_uppercase_letters: -" + score, 1);
+      this.logger("Score=> consecutive_uppercase_letters: -" + score);
       return score;
     };
 
     PasswordEvaluator.prototype.calc_score_consecutive_numbers = function(pwd) {
       var score;
       score = parseInt(this.count_regex_matches(pwd, /[0-9]/g)) * 2;
-      this.logger("Score=> consecutive_numbers: -" + score, 1);
+      this.logger("Score=> consecutive_numbers: -" + score);
       return score;
     };
 
