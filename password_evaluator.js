@@ -1,3 +1,4 @@
+
 /*
   password-evaluator v 0.1
   http://cc-web.eu/projects/javascript/password-evaluator
@@ -277,5 +278,3 @@
   })();
 
 }).call(this);
-
-
