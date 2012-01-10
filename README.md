@@ -14,9 +14,9 @@ The password-evaluator uses [CoffeeScript](http://jashkenas.github.com/coffee-sc
 
 
 ## TODO
-* Beautify the sourcecode;
-* Check and optimize perfomance;
-* Check compatibility in several browser;
+* beautify the sourcecode
+* check and optimize perfomance
+* check compatibility in several browser
 
 
 ## License
