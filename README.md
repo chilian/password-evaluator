@@ -5,7 +5,7 @@ JavaScript-Class that helps to score a given password
 ## Usage
 
     pwe = new PasswordEvaluator();
-    //pwe.debug_mode = true //turn debug mode on to get Infos via Firebug
+    //pwe.debug_mode = true //turn on debug mode to get Infos via Firebug
     pwm.check_password('Test1234') // return a score from 0 to 100
 
 ## Get the code
