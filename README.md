@@ -1,6 +1,6 @@
-# Password-Evaluator
+# Password evaluator
 
-JavaScript-Class that helps to score a given password
+JavaScript-Class that helps to score a password.
 
 ## Usage
 
@@ -10,7 +10,7 @@ JavaScript-Class that helps to score a given password
 
 ## Get the code
 
-The Password-Evaluator uses [CoffeeScript](http://jashkenas.github.com/coffee-script) and [Uglifier](https://github.com/lautis/uglifier). You can find the source at the Folder "src". 
+The password-evaluator uses [CoffeeScript](http://jashkenas.github.com/coffee-script) and [Uglifier](https://github.com/lautis/uglifier). You can find the source at the Folder "src". 
 
 
 ## TODO
